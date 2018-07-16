@@ -1,1 +1,9 @@
-{{outlet}}
+<div>
+  <b>Your Templates:</b>
+  {{#each model.templates as |template|}}
+    <div>
+      <p>{{template.identifier}}</p>
+      <p>{{template.content}}</p>
+    </div>
+  {{/each}}
+</div>

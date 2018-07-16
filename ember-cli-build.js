@@ -10,6 +10,9 @@ const LOADER_SOURCE = './node_modules/loader.js/dist/loader';
 
 module.exports = function(defaults) {
   let app = new EmberApp(defaults, {
+    babel: {
+      plugins: ['transform-object-rest-spread'],
+    },
   });
 
   let babel = app.project.findAddonByName('ember-cli-babel');
