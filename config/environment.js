@@ -2,6 +2,7 @@
 
 module.exports = function(environment) {
   let ENV = {
+    podModulePrefix: 'steward/pods',
     modulePrefix: 'steward',
     environment,
     rootURL: '/',

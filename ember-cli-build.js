@@ -1,24 +1,28 @@
 'use strict';
 
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+const Funnel = require('broccoli-funnel');
+const debug = require('broccoli-debug').buildDebugCallback('steward');
+const concat = require('broccoli-concat');
+const Merge = require('broccoli-merge-trees');
 
 module.exports = function(defaults) {
   let app = new EmberApp(defaults, {
-    // Add options here
   });
 
-  // Use `app.import` to add additional libraries to the generated
-  // output files.
-  //
-  // If you need to use different assets in different
-  // environments, specify an object as the first parameter. That
-  // object's keys should be the environment name and the values
-  // should be the asset to use in that environment.
-  //
-  // If the library that you are including contains AMD or ES6
-  // modules that you would like to import into your application
-  // please specify an object with the list of modules as keys
-  // along with the exports of each module as its value.
+  let babel = app.project.findAddonByName('ember-cli-babel');
+  let scripts = debug(new Funnel('content-scripts', { destDir: 'content-scripts' }), 'funnel');
+  let transpiled = debug(babel.transpileTree(scripts), 'transpiled');
+  let merged = debug(new Merge([
+    transpiled,
+    debug(new Funnel('./node_modules/loader.js/dist/loader', { destDir: 'loader' }), 'loader-copy'),
+  ]), 'merged');
+  let bundle = debug(concat(merged, {
+    headerFiles: ['loader/loader.js'],
+    inputFiles: ['**/content-scripts/*.js', '**/content-scripts/**/*.js'],
+    outputFile: 'content-scripts/worker.js',
+    footer: ';(function() { require("content-scripts/worker"); })();',
+  }), 'bundle');
 
-  return app.toTree();
+  return app.toTree([bundle]);
 };
