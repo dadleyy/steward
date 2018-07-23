@@ -1,0 +1,13 @@
+<header>
+  Your Templates
+</header>
+<section role="template-listing">
+  {{#each model.templates as |template|}}
+    <article class="flex">
+      <div>{{template.name}} <em>({{template.identifier}})</em></div>
+      <aside>
+        {{fa-icon "times"}}
+      </aside>
+    </article>
+  {{/each}}
+</section>

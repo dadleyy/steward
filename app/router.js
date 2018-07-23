@@ -7,6 +7,8 @@ const Router = EmberRouter.extend({
 });
 
 Router.map(function() {
+  this.route('index', { path: '/index.html' });
+  this.route('template', { path: 'template/:id' });
   this.route('not-found', { path: '*' });
 });
 

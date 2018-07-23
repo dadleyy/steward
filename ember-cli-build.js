@@ -10,6 +10,9 @@ const LOADER_SOURCE = './node_modules/loader.js/dist/loader';
 
 module.exports = function(defaults) {
   let app = new EmberApp(defaults, {
+    sassOptions: {
+      extension: 'sass',
+    },
     babel: {
       plugins: ['transform-object-rest-spread'],
     },
